@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Stopwatch</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #0a0a0a;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #ffd700;
+    }
+
+    .container {
+      background: #111;
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    #display {
+      font-size: 45px;
+      margin-bottom: 20px;
+      letter-spacing: 3px;
+    }
+
+    .buttons button {
+      margin: 5px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      background: #ffd700;
+      color: black;
+      transition: 0.3s;
+    }
+
+    .buttons button:hover {
+      background: #ffcc00;
+      transform: scale(1.05);
+    }
+
+    ul {
+      margin-top: 20px;
+      list-style: none;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+
+    ul li {
+      padding: 5px;
+      border-bottom: 1px solid #333;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h1>Stopwatch</h1>
+
+    <div id="display">00:00:00</div>
+
+    <div class="buttons">
+      <button onclick="start()">Start</button>
+      <button onclick="pause()">Pause</button>
+      <button onclick="reset()">Reset</button>
+      <button onclick="lap()">Lap</button>
+    </div>
+
+    <ul id="laps"></ul>
+  </div>
+
+  <script>
+    let time = 0;
+    let timer = null;
+
+    function formatTime(ms) {
+      let totalMs = ms % 1000;
+      let seconds = Math.floor(ms / 1000);
+      let mins = Math.floor(seconds / 60);
+
+      seconds = seconds % 60;
+      let milli = Math.floor(totalMs / 10);
+
+      return (
+        String(mins).padStart(2, '0') + ":" +
+        String(seconds).padStart(2, '0') + ":" +
+        String(milli).padStart(2, '0')
+      );
+    }
+
+    function start() {
+      if (timer !== null) return;
+
+      timer = setInterval(() => {
+        time += 10;
+        document.getElementById("display").innerText = formatTime(time);
+      }, 10);
+    }
+
+    function pause() {
+      clearInterval(timer);
+      timer = null;
+    }
+
+    function reset() {
+      clearInterval(timer);
+      timer = null;
+      time = 0;
+      document.getElementById("display").innerText = "00:00:00";
+      document.getElementById("laps").innerHTML = "";
+    }
+
+    function lap() {
+      let li = document.createElement("li");
+      li.innerText = formatTime(time);
+      document.getElementById("laps").appendChild(li);
+    }
+  </script>
+
+</body>
+</html>
